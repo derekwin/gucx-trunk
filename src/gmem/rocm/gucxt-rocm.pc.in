@@ -1,0 +1,5 @@
+Name: @PACKAGE@-rocm
+Description: GUCXT ROCM module
+Version: @VERSION@
+Libs:
+Libs.private:

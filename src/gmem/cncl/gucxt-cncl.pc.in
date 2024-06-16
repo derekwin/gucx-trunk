@@ -1,0 +1,5 @@
+Name: @PACKAGE@-cncl
+Description: GUCXT CNCL module
+Version: @VERSION@
+Libs:
+Libs.private:

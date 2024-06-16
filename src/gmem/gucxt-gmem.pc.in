@@ -1,0 +1,12 @@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+bindir = @exec_prefix@/bin
+libdir = @libdir@
+includedir = @includedir@
+
+Name: @PACKAGE@-gmem
+Description: GUCXT gmem module
+Version: @VERSION@
+Cflags: -I${includedir}
+Libs: -L${libdir} -lgucxt
+Libs.private: -Wl,--undefined=gucxt_init

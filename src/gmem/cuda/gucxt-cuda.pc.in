@@ -1,0 +1,5 @@
+Name: @PACKAGE@-cuda
+Description: GUCXT CUDA module
+Version: @VERSION@
+Libs:
+Libs.private:
