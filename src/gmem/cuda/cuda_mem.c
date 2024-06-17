@@ -44,12 +44,13 @@ static inline gmem_status_t gmem_cuda_alloc(void **address_p, size_t length)
     return GMEM_SUCCESS;
 }
 
-static void gmem_cuda_free(void* ptr)
+static gmem_status_t gmem_cuda_free(void* ptr)
 {
     cudaFree(ptr);
+    return GMEM_SUCCESS;
 }
 
-static void gmem_cuda_memcpy(void *dst,
+static gmem_status_t gmem_cuda_memcpy(void *dst,
                                  const void *src,
                                  size_t count)
 {
@@ -58,37 +59,44 @@ static void gmem_cuda_memcpy(void *dst,
     cerr = cudaMemcpy(dst, src, count, cudaMemcpyDefault);
     if (cerr != cudaSuccess) {
         log_error("failed to copy memory: %s", cudaGetErrorString(ret));
+        return GMEM_ERROR_MEMORY_ERROR;
     }
 
     cerr = cudaDeviceSynchronize();
     if (cerr != cudaSuccess) {
         log_error("failed to sync device: %s", cudaGetErrorString(cerr));
+        return GMEM_ERROR_MEMORY_ERROR;
     }
+
+    return GMEM_SUCCESS;
 }
 
-static void* gmem_cuda_memset(void *dst, int value, size_t count)
+static gmem_status_t gmem_cuda_memset(void *dst, int value, size_t count)
 {
     cudaError_t cerr;
 
     ret = cudaMemset(dst, value, count);
     if (cerr != cudaSuccess) {
         log_error("failed to set memory: %s", cudaGetErrorString(ret));
+        return GMEM_ERROR_MEMORY_ERROR;
     }
 
-    return dst;
+    return GMEM_SUCCESS;
 }
 
 
-static gmem_allocator_t cuda_allocator = {
-#if MEM_MANAGED
-        .mem_type  = GMEM_MEMORY_TYPE_CUDA_MANAGED,
-#else
-        .mem_type  = GMEM_MEMORY_TYPE_CUDA,
-#endif
-        .gmem_init      = gmem_cuda_init,
-        .gmem_alloc     = gmem_cuda_alloc,
-        .gmem_free      = gmem_cuda_free,
-        .gmem_memcpy    = gmem_cuda_memcpy,
-        .gmem_memset    = gmem_cuda_memset,
-    };
-ga = &cuda_allocator;
+UCS_STATIC_INIT {
+    static gmem_allocator_t cuda_allocator = {
+    #if MEM_MANAGED
+            .mem_type  = GMEM_MEMORY_TYPE_CUDA_MANAGED,
+    #else
+            .mem_type  = GMEM_MEMORY_TYPE_CUDA,
+    #endif
+            .gmem_init      = gmem_cuda_init,
+            .gmem_alloc     = gmem_cuda_alloc,
+            .gmem_free      = gmem_cuda_free,
+            .gmem_memcpy    = gmem_cuda_memcpy,
+            .gmem_memset    = gmem_cuda_memset,
+        };
+    ga = &cuda_allocator;
+}

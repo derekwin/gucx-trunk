@@ -12,7 +12,7 @@ libgmem_rocm_la_LDFLAGS  = $(ROCM_LDFLAGS) $(ROCM_LIBS) -version-info $(SOVERSIO
 noinst_HEADERS = 
 
 libgmem_rocm_la_SOURCES = \
-    cuda_mem.c
+    rocm_mem.c
 
 PKG_CONFIG_NAME=rocm
 

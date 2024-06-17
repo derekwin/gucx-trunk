@@ -8,5 +8,5 @@ Name: @PACKAGE@-gmem
 Description: GUCXT gmem module
 Version: @VERSION@
 Cflags: -I${includedir}
-Libs: -L${libdir} -lgucxt
-Libs.private: -Wl,--undefined=gucxt_init
+Libs: -L${libdir} -lgmem
+Libs.private: -Wl,--undefined=gmem_init

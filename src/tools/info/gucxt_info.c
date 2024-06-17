@@ -7,8 +7,10 @@ int main()
 
     status = gmem_init(gourp_id);
     if (status != GMEM_SUCCESS) {
-        printf("gmem_init failed\n");
+        return 0;
     }
+
+    printf("%s\n", string_of_memtype(gmem_get_memory_type()));
 
     printf("hello gucxt_info\n");
 }

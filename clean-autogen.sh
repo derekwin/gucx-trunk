@@ -35,6 +35,8 @@ rm -rf src/tools/*/.deps
 rm -rf src/tools/*/*.o
 rm -rf src/tools/*/Makefile
 rm -f config/Makefile
+rm -rf src/gmem/*/*.la
+rm -rf modules
 
 # 删除生成的目录
 rm -rf autom4te.cache

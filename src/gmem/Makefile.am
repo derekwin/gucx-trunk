@@ -11,7 +11,8 @@ libgmem_ladir       = $(includedir)/gmem
 nobase_dist_libgmem_la_HEADERS = \
 	api/gmem.h
 
-noinst_HEADERS =
+noinst_HEADERS = \
+    base/gmem_iface.h
 
 libgmem_la_SOURCES = \
     base/gmem_iface.c

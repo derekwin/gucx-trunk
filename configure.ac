@@ -73,6 +73,17 @@ lt_prog_compiler_pic="$lt_prog_compiler_pic -DGUCXT_SHARED_LIB"
 link_all_deplibs=yes
 
 #
+# Check if 'ln' supports creating relative links
+#
+AC_MSG_CHECKING([if ${LN_S} supports --relative])
+AS_IF([${LN_S} --relative symlinktest 2>/dev/null],
+      [AC_MSG_RESULT([yes])
+       AC_SUBST([LN_RS], ["${LN_S} --relative"])
+       rm symlinktest],
+      [AC_MSG_RESULT([no])
+       AC_SUBST([LN_RS], [${LN_S}])])
+
+#
 # Save config flags for version dump tool
 #
 AC_DEFINE_UNQUOTED([GUCXT_CONFIGURE_FLAGS], ["$config_flags"], [GUCXT configure flags])
@@ -115,12 +126,11 @@ AS_IF([test "x$with_docs_only" = xyes],
     ],
     [
         AM_CONDITIONAL([DOCS_ONLY], [false])
+        m4_include([config/m4/compiler.m4])
         m4_include([config/m4/cuda.m4])
         m4_include([config/m4/cncl.m4])
         m4_include([config/m4/rocm.m4])
         m4_include([src/gmem/configure.m4])
-
-
     ])
 
 #

@@ -40,12 +40,13 @@ static inline gmem_status_t gmem_rocm_alloc(void **address_p, size_t length)
     return GMEM_SUCCESS;
 }
 
-static void gmem_rocm_free(void* ptr)
+static gmem_status_t gmem_rocm_free(void* ptr)
 {
     hipFree(ptr);
+    return GMEM_SUCCESS;
 }
 
-static void gmem_rocm_memcpy(void *dst,
+static gmem_status_t gmem_rocm_memcpy(void *dst,
                                  const void *src,
                                  size_t count)
 {
@@ -54,32 +55,37 @@ static void gmem_rocm_memcpy(void *dst,
     ret = hipMemcpy(dst, src, count, hipMemcpyDefault);
     if (ret != hipSuccess) {
         log_error("failed to copy memory: %s", hipGetErrorString(ret));
+        return GMEM_ERROR_MEMORY_ERROR;
     }
+    return GMEM_SUCCESS;
 }
 
-static void* gmem_rocm_memset(void *dst, int value, size_t count)
+static gmem_status_t gmem_rocm_memset(void *dst, int value, size_t count)
 {
     hipError_t ret;
 
     ret = hipMemset(dst, value, count);
     if (ret != hipSuccess) {
         log_error("failed to set memory: %s", hipGetErrorString(ret));
+        return GMEM_ERROR_MEMORY_ERROR;
     }
 
-    return dst;
+    return GMEM_SUCCESS;
 }
 
 
-static gmem_allocator_t rocm_allocator = {
-#if MEM_MANAGED
-        .mem_type  = GMEM_MEMORY_TYPE_ROCM_MANAGED,
-#else
-        .mem_type  = GMEM_MEMORY_TYPE_ROCM,
-#endif
-        .gmem_init      = gmem_rocm_init,
-        .gmem_alloc     = gmem_rocm_alloc,
-        .gmem_free      = gmem_rocm_free,
-        .gmem_memcpy    = gmem_rocm_memcpy,
-        .gmem_memset    = gmem_rocm_memset,
-    };
-ga = &rocm_allocator;
+UCS_STATIC_INIT {
+    gmem_allocator_t rocm_allocator = {
+    #if MEM_MANAGED
+            .mem_type  = GMEM_MEMORY_TYPE_ROCM_MANAGED,
+    #else
+            .mem_type  = GMEM_MEMORY_TYPE_ROCM,
+    #endif
+            .gmem_init      = gmem_rocm_init,
+            .gmem_alloc     = gmem_rocm_alloc,
+            .gmem_free      = gmem_rocm_free,
+            .gmem_memcpy    = gmem_rocm_memcpy,
+            .gmem_memset    = gmem_rocm_memset,
+        };
+    ga = &rocm_allocator;
+}
