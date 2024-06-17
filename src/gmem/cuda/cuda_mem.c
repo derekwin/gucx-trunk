@@ -31,9 +31,9 @@ static inline gmem_status_t gmem_cuda_alloc(void **address_p, size_t length)
     cudaError_t cerr;
 
 #if MEM_MANAGED
-    ret = cudaMallocManaged(address_p, length, cudaMemAttachGlobal);
+    cerr = cudaMallocManaged(address_p, length, cudaMemAttachGlobal);
 #else
-    ret = cudaMalloc(address_p, length);
+    cerr = cudaMalloc(address_p, length);
 #endif
 
     if (cerr != cudaSuccess) {
@@ -58,7 +58,7 @@ static gmem_status_t gmem_cuda_memcpy(void *dst,
 
     cerr = cudaMemcpy(dst, src, count, cudaMemcpyDefault);
     if (cerr != cudaSuccess) {
-        log_error("failed to copy memory: %s", cudaGetErrorString(ret));
+        log_error("failed to copy memory: %s", cudaGetErrorString(cerr));
         return GMEM_ERROR_MEMORY_ERROR;
     }
 
@@ -75,9 +75,9 @@ static gmem_status_t gmem_cuda_memset(void *dst, int value, size_t count)
 {
     cudaError_t cerr;
 
-    ret = cudaMemset(dst, value, count);
+    cerr = cudaMemset(dst, value, count);
     if (cerr != cudaSuccess) {
-        log_error("failed to set memory: %s", cudaGetErrorString(ret));
+        log_error("failed to set memory: %s", cudaGetErrorString(cerr));
         return GMEM_ERROR_MEMORY_ERROR;
     }
 
