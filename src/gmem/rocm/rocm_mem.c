@@ -1,4 +1,5 @@
 #include "rocm_mem.h"
+#include <hip/hip_runtime.h>
 
 gmem_status_t gmem_rocm_init(unsigned group_index)
 {

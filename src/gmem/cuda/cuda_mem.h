@@ -1,5 +1,4 @@
 #include <gmem/api/gmem.h>
-#include <cuda_runtime.h>
 
 gmem_status_t gmem_cuda_init(unsigned group_index);
 gmem_status_t gmem_cuda_alloc(void **address_p, size_t length);

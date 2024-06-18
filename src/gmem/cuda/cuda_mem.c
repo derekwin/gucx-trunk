@@ -1,4 +1,5 @@
 #include "cuda_mem.h"
+#include <cuda_runtime.h>
 
 gmem_status_t gmem_cuda_init(unsigned group_index)
 {
