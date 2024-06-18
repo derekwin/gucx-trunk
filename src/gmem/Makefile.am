@@ -1,9 +1,20 @@
 
 # SUBDIRS = . cuda rocm cncl tools/info
-SUBDIRS = . cuda rocm
+SUBDIRS = cuda rocm .  # build submodule first
 
 lib_LTLIBRARIES    = libgmem.la
 libgmem_la_CFLAGS   = $(BASE_CFLAGS)
+if HAVE_ROCM
+    libgmem_la_CFLAGS   += -DHAVE_ROCM
+    libgmem_la_LIBADD   = $(top_builddir)/src/gmem/rocm/libgmem_rocm.la
+endif
+if HAVE_CUDA
+    libgmem_la_CFLAGS   += -DHAVE_CUDA
+    libgmem_la_LIBADD   = $(top_builddir)/src/gmem/cuda/libgmem_cuda.la
+endif
+if HAVE_CNCL
+    libgmem_la_CFLAGS   += -DHAVE_CNCL
+endif
 libgmem_la_CPPFLAGS = $(BASE_CPPFLAGS)
 libgmem_la_LDFLAGS  = -ldl -version-info $(SOVERSION)
 libgmem_ladir       = $(includedir)/gmem

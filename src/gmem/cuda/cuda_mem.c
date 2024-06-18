@@ -1,7 +1,6 @@
-#include <gmem/api/gmem.h>
-#include <cuda_runtime.h>
+#include "cuda_mem.h"
 
-static gmem_status_t gmem_cuda_init(unsigned group_index)
+gmem_status_t gmem_cuda_init(unsigned group_index)
 {
     cudaError_t cerr;
     int num_gpus;
@@ -26,7 +25,7 @@ static gmem_status_t gmem_cuda_init(unsigned group_index)
     return GMEM_SUCCESS;
 }
 
-static inline gmem_status_t gmem_cuda_alloc(void **address_p, size_t length)
+gmem_status_t gmem_cuda_alloc(void **address_p, size_t length)
 {
     cudaError_t cerr;
 
@@ -44,13 +43,13 @@ static inline gmem_status_t gmem_cuda_alloc(void **address_p, size_t length)
     return GMEM_SUCCESS;
 }
 
-static gmem_status_t gmem_cuda_free(void* ptr)
+gmem_status_t gmem_cuda_free(void* ptr)
 {
     cudaFree(ptr);
     return GMEM_SUCCESS;
 }
 
-static gmem_status_t gmem_cuda_memcpy(void *dst,
+gmem_status_t gmem_cuda_memcpy(void *dst,
                                  const void *src,
                                  size_t count)
 {
@@ -71,7 +70,7 @@ static gmem_status_t gmem_cuda_memcpy(void *dst,
     return GMEM_SUCCESS;
 }
 
-static gmem_status_t gmem_cuda_memset(void *dst, int value, size_t count)
+gmem_status_t gmem_cuda_memset(void *dst, int value, size_t count)
 {
     cudaError_t cerr;
 
@@ -82,21 +81,4 @@ static gmem_status_t gmem_cuda_memset(void *dst, int value, size_t count)
     }
 
     return GMEM_SUCCESS;
-}
-
-
-UCS_STATIC_INIT {
-    static gmem_allocator_t cuda_allocator = {
-    #if MEM_MANAGED
-            .mem_type  = GMEM_MEMORY_TYPE_CUDA_MANAGED,
-    #else
-            .mem_type  = GMEM_MEMORY_TYPE_CUDA,
-    #endif
-            .gmem_init      = gmem_cuda_init,
-            .gmem_alloc     = gmem_cuda_alloc,
-            .gmem_free      = gmem_cuda_free,
-            .gmem_memcpy    = gmem_cuda_memcpy,
-            .gmem_memset    = gmem_cuda_memset,
-        };
-    ga = &cuda_allocator;
 }

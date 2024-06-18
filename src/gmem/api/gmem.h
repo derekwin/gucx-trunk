@@ -61,7 +61,6 @@ typedef struct gmem_allocator {
 /* Allocators for each memory type */
 // #define NUM_GMEM_ALLOCATOR 1
 // #define DEFAULT_GMEM_ALLOCATOR 0
-gmem_allocator_t *ga = NULL;
 
 extern gmem_status_t gmem_init(unsigned group_index);
 extern gmem_status_t gmem_alloc(void** ptr, size_t size);

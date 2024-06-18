@@ -10,8 +10,9 @@
 #
 # Initialize CFLAGS
 #
-BASE_CFLAGS="-g -Wall -Werror"
-
+# BASE_CFLAGS="-g -Wall -Werror"
+BASE_CFLAGS="-g -Wall"
+# -Werror=unused-variable  -> dont check unused variable
 
 #
 # Check that C++ is functional.

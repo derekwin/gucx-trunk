@@ -1,7 +1,6 @@
-#include <gmem/api/gmem.h>
-#include <hip/hip_runtime.h>
+#include "rocm_mem.h"
 
-static gmem_status_t gmem_rocm_init(unsigned group_index)
+gmem_status_t gmem_rocm_init(unsigned group_index)
 {
     hipError_t ret;
     int num_gpus;
@@ -22,7 +21,7 @@ static gmem_status_t gmem_rocm_init(unsigned group_index)
     return GMEM_SUCCESS;
 }
 
-static inline gmem_status_t gmem_rocm_alloc(void **address_p, size_t length)
+gmem_status_t gmem_rocm_alloc(void **address_p, size_t length)
 {
     hipError_t ret;
 
@@ -40,13 +39,13 @@ static inline gmem_status_t gmem_rocm_alloc(void **address_p, size_t length)
     return GMEM_SUCCESS;
 }
 
-static gmem_status_t gmem_rocm_free(void* ptr)
+gmem_status_t gmem_rocm_free(void* ptr)
 {
     hipFree(ptr);
     return GMEM_SUCCESS;
 }
 
-static gmem_status_t gmem_rocm_memcpy(void *dst,
+gmem_status_t gmem_rocm_memcpy(void *dst,
                                  const void *src,
                                  size_t count)
 {
@@ -60,7 +59,7 @@ static gmem_status_t gmem_rocm_memcpy(void *dst,
     return GMEM_SUCCESS;
 }
 
-static gmem_status_t gmem_rocm_memset(void *dst, int value, size_t count)
+gmem_status_t gmem_rocm_memset(void *dst, int value, size_t count)
 {
     hipError_t ret;
 
@@ -74,18 +73,6 @@ static gmem_status_t gmem_rocm_memset(void *dst, int value, size_t count)
 }
 
 
-UCS_STATIC_INIT {
-    gmem_allocator_t rocm_allocator = {
-    #if MEM_MANAGED
-            .mem_type  = GMEM_MEMORY_TYPE_ROCM_MANAGED,
-    #else
-            .mem_type  = GMEM_MEMORY_TYPE_ROCM,
-    #endif
-            .gmem_init      = gmem_rocm_init,
-            .gmem_alloc     = gmem_rocm_alloc,
-            .gmem_free      = gmem_rocm_free,
-            .gmem_memcpy    = gmem_rocm_memcpy,
-            .gmem_memset    = gmem_rocm_memset,
-        };
-    ga = &rocm_allocator;
-}
+// UCS_STATIC_INIT {
+//     ga = &rocm_allocator;
+// }
