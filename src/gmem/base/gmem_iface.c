@@ -97,3 +97,17 @@ gmem_memory_type_t gmem_get_memory_type()
     log_error("gmem has not been inited");
     return GMEM_MEMORY_TYPE_LAST;
 }
+
+char* ucx_gpudirect_driver_path_str()
+{
+#if HAVE_ROCM
+    return "/dev/kfd";
+#endif
+#if HAVE_CUDA
+    return "/sys/kernel/mm/memory_peers/nv_mem/version";
+#endif
+#if HAVE_CNCL
+    return "/sys/kernel/mm/memory_peers/cambricon_peer_mem/version";
+#endif
+    return "";
+}

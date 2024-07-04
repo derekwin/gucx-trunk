@@ -69,6 +69,9 @@ extern gmem_status_t gmem_memcpy(void* dst, const void* src, size_t size);
 extern gmem_status_t gmem_memset(void* dst, int val, size_t size);
 extern gmem_memory_type_t gmem_get_memory_type(void);
 
+// gpudirect_driver_path_str for ucx
+extern char* ucx_gpudirect_driver_path_str(void);
+
 /* Unique value generator */
 #ifdef __COUNTER__
 #  define UCS_PP_UNIQUE_ID __COUNTER__
