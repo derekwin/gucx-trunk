@@ -2,6 +2,8 @@
 #include <base/gmem_iface.h>
 #include <stdlib.h>
 
+static int gucxt_inited = 0;
+
 #if HAVE_ROCM
     #include <gmem/rocm/rocm_mem.h>
     gmem_allocator_t rocm_allocator = {
@@ -61,13 +63,13 @@ gmem_status_t gmem_init(unsigned group_index)
         log_error("ga->gmem_init(group_index); failed");
         return ret;
     }
-    inited = 1;
+    gucxt_inited = 1;
     return GMEM_SUCCESS;
 }
 
 gmem_status_t gmem_alloc(gmem_t* mem, size_t size)
 {   
-    if(inited){
+    if(gucxt_inited){
         return ga->gmem_alloc(mem, size);
     }
     log_error("gmem has not been inited");
@@ -76,7 +78,7 @@ gmem_status_t gmem_alloc(gmem_t* mem, size_t size)
 
 gmem_status_t gmem_free(void* ptr)
 { 
-    if(inited){
+    if(gucxt_inited){
         return ga->gmem_free(ptr);
     }
     log_error("gmem has not been inited");
@@ -85,7 +87,7 @@ gmem_status_t gmem_free(void* ptr)
 
 gmem_status_t gmem_memcpy(void* dst, const void* src, size_t size)
 {
-    if(inited){
+    if(gucxt_inited){
         return ga->gmem_memcpy(dst, src, size);
     }
     log_error("gmem has not been inited");
@@ -94,7 +96,7 @@ gmem_status_t gmem_memcpy(void* dst, const void* src, size_t size)
 
 gmem_status_t gmem_memset(void* dst, int val, size_t size)
 {
-    if(inited){
+    if(gucxt_inited){
         return ga->gmem_memset(dst, val, size);
     }
     log_error("gmem has not been inited");
@@ -103,7 +105,7 @@ gmem_status_t gmem_memset(void* dst, int val, size_t size)
 
 gmem_memory_type_t gmem_get_memory_type()
 {
-    if(inited){
+    if(gucxt_inited){
         return ga->mem_type;
     }
     log_error("gmem has not been inited");
@@ -138,4 +140,54 @@ char* gmem_mem_type_str()
             break;
     }
     return str;
+}
+
+char* gmem_error_str(gmem_status_t ret)
+{
+    char* str = "";
+    switch(ret){
+        case GMEM_SUCCESS:
+            str = "GMEM_SUCCESS";
+        case GMEM_ERROR_CODE_INTERNAL_ERROR:
+            str = "GMEM_ERROR_CODE_INTERNAL_ERROR";
+        case GMEM_ERROR_CODE_INVALID_ARGUMENTS:
+            str = "GMEM_ERROR_CODE_INVALID_ARGUMENTS";
+        case GMEM_ERROR_NO_DEVICE:
+            str = "GMEM_ERROR_NO_DEVICE";
+        case GMEM_ERROR_NO_MEMORY:
+            str = "GMEM_ERROR_NO_MEMORY";
+        case GMEM_ERROR_MEMORY_ERROR:
+            str = "GMEM_ERROR_MEMORY_ERROR";
+        case GMEM_ERROR_CODE_OUT_OF_MEMORY:
+            str = "GMEM_ERROR_CODE_OUT_OF_MEMORY";
+        case GMEM_ERROR_CODE_NOT_IMPLEMENTED:
+            str = "GMEM_ERROR_CODE_NOT_IMPLEMENTED";
+        case GMEM_ERROR_CODE_NONE:
+            str = "GMEM_ERROR_CODE_NONE";
+        case GMEM_ERROR_CODE_LAST:
+            str = "GMEM_ERROR_CODE_LAST";
+        default:
+            break;
+    }
+    return str;
+}
+
+char *string_of_memtype(gmem_memory_type_t type){
+    switch(type){
+        case GMEM_MEMORY_TYPE_HOST:
+            return "GMEM_MEMORY_TYPE_HOST";
+        case GMEM_MEMORY_TYPE_ROCM:
+            return "GMEM_MEMORY_TYPE_ROCM";
+        case GMEM_MEMORY_TYPE_CUDA:
+            return "GMEM_MEMORY_TYPE_CUDA";
+        case GMEM_MEMORY_TYPE_CNCL:
+            return "GMEM_MEMORY_TYPE_CNCL";
+        case GMEM_MEMORY_TYPE_ROCM_MANAGED:
+            return "GMEM_MEMORY_TYPE_ROCM_MANAGED";
+        case GMEM_MEMORY_TYPE_CUDA_MANAGED:
+            return "GMEM_MEMORY_TYPE_CUDA_MANAGED";
+        default:
+            break;
+    }
+    return "GMEM_MEMORY_TYPE_UNKNOWN";
 }

@@ -72,8 +72,3 @@ gmem_status_t gmem_rocm_memset(void *dst, int value, size_t count)
 
     return GMEM_SUCCESS;
 }
-
-
-// UCS_STATIC_INIT {
-//     ga = &rocm_allocator;
-// }
