@@ -70,7 +70,9 @@ extern gmem_status_t gmem_memset(void* dst, int val, size_t size);
 extern gmem_memory_type_t gmem_get_memory_type(void);
 
 // gpudirect_driver_path_str for ucx
-extern char* ucx_gpudirect_driver_path_str(void);
+extern char* gpudirect_driver_path_str(void);
+
+extern char* gmem_error_str(gmem_status_t);
 
 /* Unique value generator */
 #ifdef __COUNTER__

@@ -98,7 +98,7 @@ gmem_memory_type_t gmem_get_memory_type()
     return GMEM_MEMORY_TYPE_LAST;
 }
 
-char* ucx_gpudirect_driver_path_str()
+char* gpudirect_driver_path_str()
 {
 #if HAVE_ROCM
     return "/dev/kfd";
@@ -110,4 +110,20 @@ char* ucx_gpudirect_driver_path_str()
     return "/sys/kernel/mm/memory_peers/cambricon_peer_mem/version";
 #endif
     return "";
+}
+
+char* gmem_mem_type_str()
+{
+    char* str = "";
+    switch(gmem_get_memory_type()){
+        case GMEM_MEMORY_TYPE_ROCM:
+            str = "GMEM_MEMORY_TYPE_ROCM";
+        case GMEM_MEMORY_TYPE_CUDA:
+            str = "GMEM_MEMORY_TYPE_CUDA";
+        case GMEM_MEMORY_TYPE_CNCL:
+            str = "GMEM_MEMORY_TYPE_CNCL";
+        default:
+            break;
+    }
+    return str;
 }

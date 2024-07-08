@@ -3,7 +3,9 @@
 SUBDIRS = cuda rocm .  # build submodule first
 
 nobase_dist_libgmem_la_HEADERS = \
-	api/gmem.h
+	api/gmem.h \
+    api/log.h \
+    api/type.h
 
 noinst_HEADERS = \
     base/gmem_iface.h
