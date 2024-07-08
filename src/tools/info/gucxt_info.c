@@ -3,12 +3,12 @@
 
 int main()
 {
-    int gourp_id = 0;
+    int group_id = 0;
     gmem_status_t status;
     gmem_t mem = {.ptr=NULL, .dri_addr=0};
     char *src = "testest";
 
-    status = gmem_init(gourp_id);
+    status = gmem_init(group_id);
     if (status != GMEM_SUCCESS) {
         return 0;
     }
