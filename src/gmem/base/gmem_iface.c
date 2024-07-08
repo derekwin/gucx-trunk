@@ -34,6 +34,18 @@
         };
     gmem_allocator_t *ga = &cuda_allocator;
 #endif
+#if HAVE_CNCL
+    #include <gmem/cncl/cncl_mem.h>
+    gmem_allocator_t cncl_allocator = {
+            .mem_type  = GMEM_MEMORY_TYPE_CNCL,
+            .gmem_init      = gmem_cncl_init,
+            .gmem_alloc     = gmem_cncl_alloc,
+            .gmem_free      = gmem_cncl_free,
+            .gmem_memcpy    = gmem_cncl_memcpy,
+            .gmem_memset    = gmem_cncl_memset,
+        };
+    gmem_allocator_t *ga = &cncl_allocator;
+#endif
 
 gmem_status_t gmem_init(unsigned group_index)
 {   

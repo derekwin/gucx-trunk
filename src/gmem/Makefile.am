@@ -1,6 +1,6 @@
 
 # SUBDIRS = . cuda rocm cncl tools/info
-SUBDIRS = cuda rocm .  # build submodule first
+SUBDIRS = cuda rocm cncl .  # build submodule first
 
 nobase_dist_libgmem_la_HEADERS = \
 	api/gmem.h \
@@ -29,6 +29,7 @@ if HAVE_CUDA
 endif
 if HAVE_CNCL
     libgmem_la_CFLAGS   += -DHAVE_CNCL
+    libgmem_la_LIBADD   = $(top_builddir)/src/gmem/cncl/libgmem_cncl.la
 endif
 
 

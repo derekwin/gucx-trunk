@@ -37,10 +37,10 @@ AS_IF([test "x$cncl_checked" != "xyes"],
          AC_CHECK_HEADERS([cncl.h cnrt.h cn_api.h],
                           [cncl_happy="yes"], [cncl_happy="no"])
 
-      #    # Check cncl libraries
-      #    AS_IF([test "x$cncl_happy" = "xyes"],
-      #          [AC_CHECK_LIB([cnrt], [cnrtGetDevice],
-      #                        [CNCL_LIBS="$CNCL_LIBS -lcndrv"], [cncl_happy="no"])])
+         # Check cncl libraries
+         # AS_IF([test "x$cncl_happy" = "xyes"],
+         #       [AC_CHECK_LIB([cnrt], [cnrtGetDevice],
+         #                     [CNCL_LIBS="$CNCL_LIBS -lcndrv"], [cncl_happy="no"])])
 
       CNCL_LIBS="$CNCL_LIBS -lcnrt -lcndrv -lmluops -lrt -ldl -lpthread"
 
