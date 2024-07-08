@@ -64,7 +64,7 @@ typedef struct gmem_allocator {
 
 typedef struct gmem {
     void *ptr;
-    cn_uint64_t dri_addr;  // mlu_addr while using mlu driver
+    uint64_t dri_addr;  // mlu_addr while using mlu driver
 } gmem_t;
 
 extern gmem_status_t gmem_init(unsigned group_index);

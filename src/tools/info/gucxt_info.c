@@ -17,7 +17,7 @@ int main()
 
     printf("hello from gucxt_info\n");
 
-    
+
     gmem_alloc(&mem, 100);
     gmem_memcpy(mem.ptr, (void*)src, strlen(src));
     printf("%s\n", (char*)mem.ptr);

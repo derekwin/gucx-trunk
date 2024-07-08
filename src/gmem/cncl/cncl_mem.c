@@ -123,11 +123,9 @@ gmem_status_t gmem_cncl_alloc(gmem_t* mem, size_t length)
 
 gmem_status_t gmem_cncl_free(gmem_t *mem)
 {   
-    CNaddr mlu_addr = (CNaddr)mem->ptr;
-
-    printf("deallocating RX MLU buffer %ld\n", mlu_addr);
-    cnFree(mlu_addr);
-    mlu_addr = 0;
+    printf("deallocating RX MLU buffer %ld\n", (CNaddr)mem->ptr);
+    cnFree((CNaddr)mem->ptr);
+    mem->dri_addr=0;
     
     printf("destroying current MLU Ctx\n");
 	ERROR_CHECK(cnCtxDestroy(cnContext));
@@ -163,3 +161,6 @@ gmem_status_t gmem_cncl_memset(void *dst, int value, size_t count)
 
     return GMEM_SUCCESS;
 }
+
+// cncl memcpy 存在问题
+// cncl 的mem无法直接被printf
