@@ -65,10 +65,10 @@ gmem_status_t gmem_init(unsigned group_index)
     return GMEM_SUCCESS;
 }
 
-gmem_status_t gmem_alloc(void** ptr, size_t size)
+gmem_status_t gmem_alloc(gmem_t* mem, size_t size)
 {   
     if(inited){
-        return ga->gmem_alloc(ptr, size);
+        return ga->gmem_alloc(mem, size);
     }
     log_error("gmem has not been inited");
     return GMEM_ERROR_NO_DEVICE;

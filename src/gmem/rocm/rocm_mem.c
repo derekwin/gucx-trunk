@@ -22,14 +22,14 @@ gmem_status_t gmem_rocm_init(unsigned group_index)
     return GMEM_SUCCESS;
 }
 
-gmem_status_t gmem_rocm_alloc(void **address_p, size_t length)
+gmem_status_t gmem_rocm_alloc(gmem_t* mem, size_t length)
 {
     hipError_t ret;
 
 #if MEM_MANAGED
-    ret = hipMallocManaged(address_p, length, hipMemAttachGlobal);
+    ret = hipMallocManaged(&(mem->ptr), length, hipMemAttachGlobal);
 #else
-    ret = hipMalloc(address_p, length);
+    ret = hipMalloc(&(mem->ptr), length);
 #endif
 
     if (ret != hipSuccess) {
@@ -40,9 +40,9 @@ gmem_status_t gmem_rocm_alloc(void **address_p, size_t length)
     return GMEM_SUCCESS;
 }
 
-gmem_status_t gmem_rocm_free(void* ptr)
+gmem_status_t gmem_rocm_free(gmem_t* mem)
 {
-    hipFree(ptr);
+    hipFree(mem->ptr);
     return GMEM_SUCCESS;
 }
 

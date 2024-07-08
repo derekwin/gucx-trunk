@@ -100,9 +100,9 @@ gmem_status_t gmem_cncl_init(unsigned group_index)
     return GMEM_SUCCESS;
 }
 
-gmem_status_t gmem_cncl_alloc(void **address_p, size_t length)
+gmem_status_t gmem_cncl_alloc(gmem_t* mem, size_t length)
 {
-    CNaddr mlu_addr;
+    // CNaddr mlu_addr;  mem->dri_addr
     CNresult error;
     const size_t gpu_page_size = 64 * 1024;
     size_t size = (length + gpu_page_size - 1) &
@@ -110,20 +110,20 @@ gmem_status_t gmem_cncl_alloc(void **address_p, size_t length)
 
     printf("cnMallocPeerAble() of a %lu bytes MLU buffer\n",
             length);
-    error = cnMallocPeerAble(&mlu_addr, size);
+    error = cnMallocPeerAble(&(mem->dri_addr), size);
     if (error != CN_SUCCESS) {
         printf("cnMallocPeerAble error=%d\n", error);
         return GMEM_ERROR_NO_MEMORY;
     }
 
-    printf("allocated %zu bytes of MLU buffer at %ld\n", size, mlu_addr);
-    *address_p = (void *)mlu_addr; // ?
+    printf("allocated %zu bytes of MLU buffer at %ld\n", size, mem->dri_addr);
+    mem->ptr = (void *)mem->dri_addr; // ?
     return GMEM_SUCCESS;
 }
 
-gmem_status_t gmem_cncl_free(void* ptr)
+gmem_status_t gmem_cncl_free(gmem_t *mem)
 {   
-    CNaddr mlu_addr = (CNaddr)ptr;
+    CNaddr mlu_addr = (CNaddr)mem->ptr;
 
     printf("deallocating RX MLU buffer %ld\n", mlu_addr);
     cnFree(mlu_addr);

@@ -26,14 +26,14 @@ gmem_status_t gmem_cuda_init(unsigned group_index)
     return GMEM_SUCCESS;
 }
 
-gmem_status_t gmem_cuda_alloc(void **address_p, size_t length)
+gmem_status_t gmem_cuda_alloc(gmem_t* mem, size_t length)
 {
     cudaError_t cerr;
 
 #if MEM_MANAGED
-    cerr = cudaMallocManaged(address_p, length, cudaMemAttachGlobal);
+    cerr = cudaMallocManaged(&(mem->ptr), length, cudaMemAttachGlobal);
 #else
-    cerr = cudaMalloc(address_p, length);
+    cerr = cudaMalloc(&(mem->ptr), length);
 #endif
 
     if (cerr != cudaSuccess) {
@@ -44,9 +44,9 @@ gmem_status_t gmem_cuda_alloc(void **address_p, size_t length)
     return GMEM_SUCCESS;
 }
 
-gmem_status_t gmem_cuda_free(void* ptr)
+gmem_status_t gmem_cuda_free(gmem_t* mem)
 {
-    cudaFree(ptr);
+    cudaFree(mem->ptr);
     return GMEM_SUCCESS;
 }
 

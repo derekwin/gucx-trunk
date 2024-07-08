@@ -5,7 +5,7 @@ int main()
 {
     int gourp_id = 0;
     gmem_status_t status;
-    void *p = NULL;
+    gmem_t mem = {.ptr=NULL, .dri_addr=0};
     char *src = "testest";
 
     status = gmem_init(gourp_id);
@@ -18,7 +18,7 @@ int main()
     printf("hello from gucxt_info\n");
 
     
-    gmem_alloc(&p, 100);
-    gmem_memcpy(p, src, strlen(src));
-    printf("%s\n", (char*)p);
+    gmem_alloc(&mem, 100);
+    gmem_memcpy(mem.ptr, (void*)src, strlen(src));
+    printf("%s\n", (char*)mem.ptr);
 }

@@ -62,8 +62,13 @@ typedef struct gmem_allocator {
 // #define NUM_GMEM_ALLOCATOR 1
 // #define DEFAULT_GMEM_ALLOCATOR 0
 
+typedef struct gmem {
+    void *ptr;
+    cn_uint64_t dri_addr;  // mlu_addr while using mlu driver
+} gmem_t;
+
 extern gmem_status_t gmem_init(unsigned group_index);
-extern gmem_status_t gmem_alloc(void** ptr, size_t size);
+extern gmem_status_t gmem_alloc(gmem_t* mem, size_t size);
 extern gmem_status_t gmem_free(void* ptr);
 extern gmem_status_t gmem_memcpy(void* dst, const void* src, size_t size);
 extern gmem_status_t gmem_memset(void* dst, int val, size_t size);
