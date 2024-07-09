@@ -1,9 +1,8 @@
 # gucx-trunk
 
 ```
-autoreconf -i
-
 bash clean-autogen.sh
+autoreconf -i
 
 ./configure --prefix=/home/liujinyao/proj/gucx-trunk-install --with-cncl=/usr/local/neuware
 

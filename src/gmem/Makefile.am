@@ -2,17 +2,6 @@
 # SUBDIRS = . cuda rocm cncl tools/info
 SUBDIRS = cuda rocm cncl .  # build submodule first
 
-nobase_dist_libgmem_la_HEADERS = \
-	api/gmem.h \
-    api/log.h \
-    api/type.h
-
-noinst_HEADERS = \
-    base/gmem_iface.h
-
-libgmem_la_SOURCES = \
-    base/gmem_iface.c
-
 lib_LTLIBRARIES    = libgmem.la
 libgmem_la_CFLAGS   = $(BASE_CFLAGS)
 libgmem_la_CPPFLAGS = $(BASE_CPPFLAGS)
@@ -32,7 +21,16 @@ if HAVE_CNCL
     libgmem_la_LIBADD   = $(top_builddir)/src/gmem/cncl/libgmem_cncl.la
 endif
 
+nobase_dist_libgmem_la_HEADERS = \
+	api/gmem.h \
+    api/log.h \
+    api/type.h
 
+noinst_HEADERS = \
+    base/gmem_iface.h
+
+libgmem_la_SOURCES = \
+    base/gmem_iface.c
 
 PKG_CONFIG_NAME=gmem
 
